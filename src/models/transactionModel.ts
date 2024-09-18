@@ -1,5 +1,6 @@
 // src/models/Transaction.ts
 import mongoose, { Schema, Document } from 'mongoose';
+import { ITransaction } from '../interface/iTransaction'
 
 // Define the Transaction schema
 const TransactionSchema: Schema = new Schema({
@@ -33,6 +34,6 @@ const TransactionSchema: Schema = new Schema({
 });
 
 // Create the Transaction model
-const Transaction = mongoose.model<Document>('Transaction', TransactionSchema);
+const Transaction = mongoose.model<ITransaction & Document>('Transaction', TransactionSchema);
 
 export default Transaction;

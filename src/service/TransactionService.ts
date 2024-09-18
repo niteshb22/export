@@ -1,4 +1,3 @@
-// controllers/exportController.ts
 import { Request, Response } from 'express';
 import ExcelJS from 'exceljs';
 import Transaction from '../models/transactionModel';
@@ -34,76 +33,34 @@ export const generateReport = async (req: Request, res: Response) => {
             { header: 'GST Rs.', key: 'GST', width: 20 }
         ];
 
-        // Sample data with nested agentDetails and operator fields
+        // Fetch data from MongoDB
+        const objectId = new mongoose.Types.ObjectId('655447449e7213abbeca773e');
+        const transactions = await Transaction.find({ 'agentDetails.id': objectId });
 
-        const getAll=async()=>{
-            const objectId = new mongoose.Types.ObjectId('655447449e7213abbeca773e');
-    const result = await Transaction.find({ 'agentDetails.id': objectId });
-    console.log(result);
-     
-}
-getAll()
-        
-        const data = [
-            {
-                createdAt: new Date().toLocaleString(),
-                transactionId: 'TXN123456789',
-                clientRefId: 'CLIENT001',
-                categoryId: 'CAT001',
-                productName: 'Product A',
-                transactionType: 'Payment',
-                mode: 'Online',
-                mobileNumber: '9876543210',
-                operator: { key1: 'XYZ Bank', key2: 'IFSC001', key3: '1234567890' },
-                vendorUtrNumber: 'UTR001234567',
-                transaction_amount: 1000,
-                ccf: 10,
-                credit: 990,
-                status: 'Success',
-                agentDetails: {
-                    oldMainWalletBalance: 5000,
-                    newMainWalletBalance: 5990,
-                    commissionAmount: 20,
-                },
-                TDS: 2,
-                charges: 5,
-                GST: 18
-            },
-            {
-                createdAt: new Date().toLocaleString(),
-                transactionId: 'TXN987654321',
-                clientRefId: 'CLIENT002',
-                categoryId: 'CAT002',
-                productName: 'Product B',
-                transactionType: 'Refund',
-                mode: 'Offline',
-                mobileNumber: '9123456789',
-                operator: { key1: 'ABC Bank', key2: 'IFSC002', key3: '0987654321' },
-                vendorUtrNumber: 'UTR009876543',
-                transaction_amount: 1500,
-                ccf: 15,
-                credit: 1485,
-                status: 'Pending',
-                agentDetails: {
-                    oldMainWalletBalance: 6000,
-                    newMainWalletBalance: 7485,
-                    commissionAmount: 30,
-                },
-                TDS: 3,
-                charges: 10,
-                GST: 27
-            }
-        ];
-
-        // Flatten nested data (agentDetails and operator)
-        const flattenedData = data.map((row) => ({
-            ...row,
-            bankName: row.operator.key1,
-            bankAccountNumber: row.operator.key3,
-            ifsc: row.operator.key2,
-            openingBalance: row.agentDetails.oldMainWalletBalance,
-            closingBalance: row.agentDetails.newMainWalletBalance,
-            commission: row.agentDetails.commissionAmount,
+        // Process and flatten the data
+        const flattenedData = transactions.map((transaction) => ({
+            createdAt: transaction.createdAt.toLocaleString(),
+            transactionId: transaction.transactionId,
+            clientRefId: transaction.clientRefId,
+            categoryId: transaction.categoryId,
+            productName: transaction.productName,
+            transactionType: transaction.transactionType,
+            mode: transaction.mode,
+            mobileNumber: transaction.mobileNumber,
+            bankName: transaction.operator?.key1 || '',
+            bankAccountNumber: transaction.operator?.key3 || '',
+            ifsc: transaction.operator?.key2 || '',
+            vendorUtrNumber: transaction.vendorUtrNumber,
+            transaction_amount: transaction.transaction_amount,
+            ccf: transaction.ccf,
+            credit: transaction.credit,
+            status: transaction.status,
+            // openingBalance: transaction.agentDetails?.oldMainWalletBalance || 0,
+            // closingBalance: transaction.agentDetails?.newMainWalletBalance || 0,
+            // commission: transaction.agentDetails?.commissionAmount || 0,
+            // TDS: transaction.TDS,
+            charges: transaction.charges,
+            // GST: transaction.GST
         }));
 
         // Add flattened data to worksheet
