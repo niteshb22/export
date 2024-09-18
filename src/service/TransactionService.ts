@@ -55,10 +55,10 @@ export const generateReport = async (req: Request, res: Response) => {
             ccf: transaction.ccf,
             credit: transaction.credit,
             status: transaction.status,
-            // openingBalance: transaction.agentDetails?.oldMainWalletBalance || 0,
-            // closingBalance: transaction.agentDetails?.newMainWalletBalance || 0,
-            // commission: transaction.agentDetails?.commissionAmount || 0,
-            // TDS: transaction.TDS,
+            openingBalance: transaction.agentDetails?.oldMainWalletBalance || 0,
+            closingBalance: transaction.agentDetails?.newMainWalletBalance || 0,
+            commission: transaction.agentDetails?.commissionAmount || 0,
+            TDS: transaction.agentDetails.TDSAmount,
             charges: transaction.charges,
             // GST: transaction.GST
         }));

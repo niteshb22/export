@@ -25,10 +25,12 @@ const TransactionSchema: Schema = new Schema({
     ccf: { type: Number, required: true },
     credit: { type: Number, required: true },
     status: { type: String, required: true },
-    opening_balance: { type: Number, required: true },
-    closing_balance: { type: Number, required: true },
-    commission: { type: Number, required: true },
-    tds: { type: Number, required: true },
+    agentDetails:{
+      oldMainWalletBalance: { type: Number, required: true },
+      newMainWalletBalance: { type: Number, required: true },
+      commissionAmount: { type: Number, required: true },
+      TDSAmount: { type: Number, required: true },
+  },
     charges: { type: Number, required: true },
     gst: { type: Number, required: true }
 });

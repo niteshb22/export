@@ -21,10 +21,12 @@ export interface ITransaction {
     ccf: number;
     credit: number;
     status: string;
-    opening_balance: number;
-    closing_balance: number;
-    commission: number;
-    tds: number;
+    agentDetails:{
+        oldMainWalletBalance: number;
+        newMainWalletBalance: number;
+        commissionAmount: number;
+        TDSAmount: number;
+    }
     charges: number;
     gst: number;
 }
