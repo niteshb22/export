@@ -1,11 +1,11 @@
 // src/routes/downloadRoutes.ts
-import express, { Request, Response } from 'express';
-import { generateReport } from '../service/TransactionService';
-
+import express, { Request, Response } from "express";
+import { generateReport } from "../service/TransactionService";
 
 const router = express.Router();
 
 // Route to download Excel
-router.get('/export', generateReport);
+router.get("/export/:userId", generateReport);
+// router.get("/export/", generateReport);
 
 export default router;
